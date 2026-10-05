@@ -3,7 +3,7 @@
     <header class="page-head">
       <div>
         <h2>运营概览</h2>
-        <p class="page-desc">汇总各业务模块的关键指标，先看总量再看异常。</p>
+        <p class="page-desc">汇总各业务模块的关键指标，先看总量再看异常；汛期值班矩阵按日期和乡镇铺开责任格。</p>
       </div>
       <div class="page-actions">
         <button class="btn" type="button" @click="refresh">重新统计</button>
@@ -28,6 +28,9 @@
         </tr>
       </tbody>
     </table>
+
+    <DutyMatrix class="matrix-section" />
+
     <footer class="page-foot">
       <span>数据保存在本机浏览器里，换浏览器或清缓存会回到示例数据</span>
     </footer>
@@ -39,6 +42,7 @@ import { onMounted, ref } from 'vue'
 
 import { loadOverview } from '@/api/local-service'
 import type { OverviewResult } from '@/data/types'
+import DutyMatrix from '@/views/dashboard/DutyMatrix.vue'
 
 const cards = ref<OverviewResult['cards']>([])
 const moduleRows = ref<OverviewResult['modules']>([])

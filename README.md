@@ -69,3 +69,26 @@ npm run build
   `frontend/src/data/seed.ts`。
 - 状态流转只允许在 `local-service.ts` 里改，页面组件不做业务判断。
 - 想回到初始数据：清掉浏览器里 `geohazard-monitor-prevention:entries` 这一项，或调用 `resetModule(模块)`。
+
+## 汛期值班矩阵（运营概览页）
+
+运营概览页内嵌汛期值班矩阵，按「值班日期 × 白/夜班 × 乡镇」铺开责任格：
+
+- 格内实时汇总本乡镇**隐患点数**（在册/监测中等）、**雨量站数**（按站点编号去重，站点-乡镇映射
+  见 `data/duty-logic.ts`）和**待发布预警数**（按隐患点归口到乡镇）。
+- 格内可直接**接班、换班、确认交班、归档**。同乡镇换人当场生效；换入外乡镇人员（含县值班室代班）
+  须**县值班室负责人授权**——值班员/乡镇负责人发起只生成待审批申请，授权后才写格并标「跨乡镇代班」。
+- 值班负责人**确认交班**时按当前交接口径落任务：隐患点台账生成**现场核查任务**、避险搬迁页生成
+  **避险联络任务**；同一班次重复确认只落一套任务（幂等）。
+- **交接口径**（核查哪些隐患状态、联络哪些搬迁户、联络方式）由县值班室负责人在矩阵上调整，
+  每次调整生成新版本；重算只覆盖**未结束班次**（待接班/值班中/已交班未归档），**已归档班次保留
+  当时规则版本与已落任务**。格内显示冻结版本号（如 v1）。
+
+值班数据独立持久化在 `geohazard-monitor-prevention:duty`，相关代码：
+
+- `src/data/duty-types.ts` 类型；`src/data/duty-logic.ts` 口径任务生成与格内汇总纯函数；
+  `src/data/duty-seed.ts` 花名册、班次与口径种子；`src/data/duty-store.ts` 持久化；
+  `src/api/duty-service.ts` 业务服务；`src/views/dashboard/DutyMatrix.vue` 矩阵组件；
+  `src/views/dashboard/HandoverTaskPanel.vue` 隐患点台账/避险搬迁页的交班任务面板。
+- 业务规则验证脚本：`cd frontend && node scripts/verify-duty.mjs`。
+

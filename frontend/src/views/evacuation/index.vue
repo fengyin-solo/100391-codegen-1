@@ -63,6 +63,14 @@
       </tbody>
     </table>
 
+    <HandoverTaskPanel
+      class="handover-panel"
+      category="避险联络"
+      title="交班避险联络任务"
+      desc="值班负责人确认交班后，按交接口径对本乡镇待动员/已签约搬迁户自动生成逐户联络任务。"
+      ref-label="户号"
+    />
+
     <footer class="page-foot">
       <span>共 {{ total }} 条避险搬迁记录</span>
       <span v-if="errorMessage" class="error-text">{{ errorMessage }}</span>
@@ -80,6 +88,7 @@ import {
   runAction as applyAction,
 } from '@/api/local-service'
 import type { EntryRow } from '@/data/types'
+import HandoverTaskPanel from '@/views/dashboard/HandoverTaskPanel.vue'
 
 const meta = moduleMeta('evacuation')
 const columns = ["户号", "所属隐患点", "户主姓名", "家庭人口", "原住址", "安置方式", "安置地点", "搬迁状态"]

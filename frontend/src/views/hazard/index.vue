@@ -63,6 +63,14 @@
       </tbody>
     </table>
 
+    <HandoverTaskPanel
+      class="handover-panel"
+      category="现场核查"
+      title="交班现场核查任务"
+      desc="值班负责人确认交班后，按交接口径对本乡镇在册/监测中隐患点自动生成现场核查任务。"
+      ref-label="隐患点编号"
+    />
+
     <footer class="page-foot">
       <span>共 {{ total }} 条隐患点台账记录</span>
       <span v-if="errorMessage" class="error-text">{{ errorMessage }}</span>
@@ -80,6 +88,7 @@ import {
   runAction as applyAction,
 } from '@/api/local-service'
 import type { EntryRow } from '@/data/types'
+import HandoverTaskPanel from '@/views/dashboard/HandoverTaskPanel.vue'
 
 const meta = moduleMeta('hazard')
 const columns = ["隐患点编号", "隐患点名称", "灾害类型", "所在乡镇", "经纬度坐标", "威胁户数", "威胁人口", "隐患状态"]
