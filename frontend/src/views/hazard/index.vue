@@ -63,6 +63,36 @@
       </tbody>
     </table>
 
+    <h3 class="sub-title">汛期交班生成的现场核查任务</h3>
+    <p v-if="!inspectTasks.length" class="empty-state panel-empty">
+      暂无交班生成的现场核查任务：负责人在运营概览确认交班后，按口径为本乡镇隐患点落核查任务
+    </p>
+    <table v-else class="data-table compact">
+      <thead>
+        <tr><th>任务编号</th><th>隐患点编号</th><th>隐患点名称</th><th>来源班次</th><th>交接口径</th><th>生成时间</th><th>状态</th><th>操作</th></tr>
+      </thead>
+      <tbody>
+        <tr v-for="task in inspectTasks" :key="task.id">
+          <td>{{ task.code }}</td>
+          <td>{{ task.refCode }}</td>
+          <td>{{ task.refName }}</td>
+          <td>{{ shiftLabel(task.shiftId) }}</td>
+          <td>v{{ task.ruleVersion }}</td>
+          <td>{{ task.createdAt }}</td>
+          <td>
+            <span :class="['task-state', task.status]">{{ task.status === 'done' ? '已办结' : '待核查' }}</span>
+            <span v-if="task.doneAt" class="done-at">（{{ task.doneAt }}）</span>
+          </td>
+          <td>
+            <button v-if="task.status === 'open'" class="link" type="button" @click="finishTask(task.id)">
+              提交核查结果
+            </button>
+            <span v-else class="muted-text">已完成</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
     <footer class="page-foot">
       <span>共 {{ total }} 条隐患点台账记录</span>
       <span v-if="errorMessage" class="error-text">{{ errorMessage }}</span>
@@ -79,7 +109,13 @@ import {
   moduleMeta,
   runAction as applyAction,
 } from '@/api/local-service'
+import {
+  completeTask,
+  listTasksByHazard,
+  shiftLabel,
+} from '@/api/duty-service'
 import type { EntryRow } from '@/data/types'
+import type { HandoverTask } from '@/data/duty/types'
 
 const meta = moduleMeta('hazard')
 const columns = ["隐患点编号", "隐患点名称", "灾害类型", "所在乡镇", "经纬度坐标", "威胁户数", "威胁人口", "隐患状态"]
@@ -92,12 +128,30 @@ const total = ref(0)
 const errorMessage = ref('')
 const filters = ref<Record<string, string>>({})
 const filterFields = columns.slice(0, 3)
+const inspectTasks = ref<HandoverTask[]>([])
 const statusSummary = computed(() =>
   statuses.map((status: string) => ({
     status,
     count: rows.value.filter((row) => String(row.status) === status).length,
   })),
 )
+
+function loadTasks() {
+  const codes = new Set(rows.value.map((row) => String(row['隐患点编号'] ?? '')))
+  inspectTasks.value = [...codes]
+    .flatMap((code) => listTasksByHazard(code))
+    .sort((a, b) => b.shiftId - a.shiftId)
+}
+
+function finishTask(id: number) {
+  errorMessage.value = ''
+  const result = completeTask(id)
+  if (!result.ok) {
+    errorMessage.value = result.message
+    return
+  }
+  reload()
+}
 
 function resetFilters() {
   filters.value = {}
@@ -128,6 +182,7 @@ function reload() {
     const payload = listEntries(meta.key, filters.value)
     rows.value = payload.items
     total.value = payload.total
+    loadTasks()
   } catch (error) {
     errorMessage.value = error instanceof Error ? error.message : '隐患点台账列表读取失败'
   }

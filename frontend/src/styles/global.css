@@ -35,3 +35,54 @@ body { margin: 0; background: #f6f8fb; color: #1f2937; }
 .error-text { color: #b42318; }
 .status-legend { display: flex; flex-wrap: wrap; gap: 12px; margin: 0 0 10px; font-size: 12px; color: var(--muted); }
 .legend-item { background: #eef2f7; border-radius: 999px; padding: 2px 10px; }
+.legend-item.warn { background: #fef3c7; color: #92400e; }
+
+/* 汛期值班矩阵 */
+.sub-title { font-size: 15px; margin: 18px 0 8px; }
+.duty-matrix { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin: 16px 0; }
+.matrix-scroll { overflow-x: auto; }
+.matrix-table { border-collapse: collapse; width: 100%; min-width: 860px; table-layout: fixed; }
+.matrix-table th, .matrix-table td { border: 1px solid var(--border); vertical-align: top; }
+.matrix-table thead th { background: #f1f5f9; padding: 8px 10px; font-size: 13px; text-align: left; }
+.matrix-table thead th.today { background: #dbeafe; }
+.town-col { width: 110px; background: #f8fafc; padding: 8px 10px; font-size: 13px; text-align: left; }
+.today-tag { margin-left: 6px; background: var(--brand); color: #fff; border-radius: 4px; padding: 0 6px; font-size: 11px; font-style: normal; }
+.duty-cell { padding: 8px; font-size: 12px; background: #fff; }
+.duty-cell.today { outline: 2px solid #bfdbfe; outline-offset: -2px; }
+.duty-cell.ongoing { background: #f0f9ff; }
+.duty-cell.handed { background: #f0fdf4; }
+.duty-cell.archived { background: #f8fafc; color: var(--muted); }
+.cell-head { display: flex; justify-content: space-between; align-items: center; gap: 6px; }
+.cell-person { font-weight: 600; font-size: 13px; font-style: normal; }
+.cell-status { font-size: 11px; color: var(--muted); }
+.cover-tag { background: #b45309; color: #fff; border-radius: 4px; padding: 0 5px; font-size: 11px; font-style: normal; margin-left: 4px; }
+.cell-metrics { display: flex; flex-wrap: wrap; gap: 4px 8px; margin: 6px 0; }
+.metric { background: #eef2f7; border-radius: 4px; padding: 1px 6px; }
+.metric.alert { background: #fee2e2; color: #b42318; font-weight: 600; }
+.cell-tasks { color: var(--muted); display: flex; justify-content: space-between; gap: 6px; align-items: center; }
+.rule-tag { background: #e0e7ff; color: #3730a3; border-radius: 4px; padding: 0 5px; font-style: normal; font-size: 11px; }
+.cell-actions { display: flex; gap: 10px; margin-top: 6px; }
+
+/* 弹窗 */
+.modal-mask { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.45); display: flex; align-items: center; justify-content: center; z-index: 50; padding: 24px; }
+.modal { background: #fff; border-radius: 10px; width: 720px; max-width: 100%; max-height: 88vh; display: flex; flex-direction: column; box-shadow: 0 18px 48px rgba(15, 23, 42, 0.25); }
+.duty-modal { width: 780px; }
+.modal-head { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+.modal-head h3 { margin: 0; font-size: 15px; }
+.modal-body { padding: 12px 16px; overflow-y: auto; }
+.modal-foot { display: flex; justify-content: flex-end; gap: 8px; align-items: center; padding: 10px 16px; border-top: 1px solid var(--border); }
+.modal-foot .error-text, .modal-foot .ok-text { margin-right: auto; }
+.ok-text { color: #15803d; }
+.data-table.compact th, .data-table.compact td { padding: 6px 8px; font-size: 12px; }
+.panel-empty { padding: 12px; border: 1px dashed var(--border); border-radius: 6px; }
+.log-list { list-style: none; margin: 0; padding: 0; font-size: 12px; color: var(--muted); }
+.log-list li { padding: 4px 0; border-bottom: 1px dashed #e5e7eb; }
+.log-at { color: #334155; margin-right: 6px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 14px; }
+.filter-item.full, .filter-item.full textarea { grid-column: 1 / -1; }
+.filter-item textarea, .filter-item select { width: 100%; border: 1px solid var(--border); border-radius: 6px; padding: 6px 8px; font: inherit; }
+.hint-text { font-size: 12px; color: #92400e; background: #fefce8; border-radius: 6px; padding: 6px 8px; }
+.task-state { border-radius: 999px; padding: 1px 8px; font-size: 12px; }
+.task-state.open { background: #fef3c7; color: #92400e; }
+.task-state.done { background: #dcfce7; color: #166534; }
+.done-at, .muted-text { color: var(--muted); font-size: 12px; }

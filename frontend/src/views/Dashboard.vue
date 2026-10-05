@@ -3,7 +3,7 @@
     <header class="page-head">
       <div>
         <h2>运营概览</h2>
-        <p class="page-desc">汇总各业务模块的关键指标，先看总量再看异常。</p>
+        <p class="page-desc">汇总各业务模块的关键指标，先看总量再看异常；汛期值班责任格直达换班与交班。</p>
       </div>
       <div class="page-actions">
         <button class="btn" type="button" @click="refresh">重新统计</button>
@@ -15,9 +15,13 @@
         <strong class="stat-value">{{ card.value }}</strong>
       </article>
     </div>
+
+    <DutyMatrix />
+
+    <h3 class="sub-title">各业务模块概览</h3>
     <table class="data-table">
       <thead>
-        <tr><th>业务模块</th><th>今日新增</th><th>待处理</th><th>异常量</th></tr>
+        <tr><th>业务模块</th><th>登记量</th><th>待处理</th><th>异常量</th></tr>
       </thead>
       <tbody>
         <tr v-for="row in moduleRows" :key="row.name">
@@ -39,6 +43,7 @@ import { onMounted, ref } from 'vue'
 
 import { loadOverview } from '@/api/local-service'
 import type { OverviewResult } from '@/data/types'
+import DutyMatrix from './dashboard/DutyMatrix.vue'
 
 const cards = ref<OverviewResult['cards']>([])
 const moduleRows = ref<OverviewResult['modules']>([])
